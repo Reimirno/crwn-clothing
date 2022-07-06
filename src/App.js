@@ -11,4 +11,9 @@ function App() {
   );
 }
 
+/* API Changes:
+<Routes> Used to be <Switch> 
+element={<Homepage />} used to be component={Homepage}
+*/
+
 export default App;
