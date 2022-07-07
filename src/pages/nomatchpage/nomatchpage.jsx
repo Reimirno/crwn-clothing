@@ -6,7 +6,7 @@ const NoMatchPage = ({ router }) => {
   return (
     <div>
       <h1>404</h1>
-      <button onClick={() => router.navigate("/")}>Main Page</button>
+      <button onClick={() => router.navigate("/")}>Home Page</button>
     </div>
   );
 };
