@@ -7,8 +7,8 @@ import NoMatchPage from "./pages/nomatchpage/nomatchpage";
 function App() {
   return (
     <Routes>
-      <Route exact path="/" element={<Homepage />} />
-      <Route exact path="/about" element={<AboutPage />} />
+      <Route index element={<Homepage />} />
+      <Route path="about" element={<AboutPage />} />
       <Route path="*" element={<NoMatchPage />} />
     </Routes>
   );
