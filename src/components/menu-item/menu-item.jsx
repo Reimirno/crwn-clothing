@@ -1,11 +1,12 @@
 import "./menu-item.scss";
 import withRouter from "../../utilities/withRouter";
 
-const MenuItem = ({ title, desc, imageUrl, size, router }) => {
+const MenuItem = ({ title, desc, imageUrl, size, router, linkUrl }) => {
+  console.log(router);
   return (
     <div
       className={`menu-item ${size}`}
-      onClick={() => router.navigate("about")}
+      onClick={() => router.navigate(`${router.location.pathname}${linkUrl}`)}
     >
       <div
         className="menu-img"
