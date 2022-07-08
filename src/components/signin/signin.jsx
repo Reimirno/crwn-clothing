@@ -49,8 +49,7 @@ class SignIn extends React.Component {
           />
           <GeneralButton type="submit"> Sign In </GeneralButton>
           <GeneralButton onClick={signInWithGoogle}>
-            {" "}
-            Sign In with Google{" "}
+            Sign In with Google
           </GeneralButton>
           {/* <input type="submit" value="Submit Form" /> */}
         </form>
