@@ -2,6 +2,7 @@ import React from "react";
 import FormInput from "../form-input/form-input";
 import GeneralButton from "../general-button/general-button";
 import "./signin.scss";
+import { signInWithGoogle } from "../../firebase/firebase.utils";
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -47,6 +48,10 @@ class SignIn extends React.Component {
             required
           />
           <GeneralButton type="submit"> Sign In </GeneralButton>
+          <GeneralButton onClick={signInWithGoogle}>
+            {" "}
+            Sign In with Google{" "}
+          </GeneralButton>
           {/* <input type="submit" value="Submit Form" /> */}
         </form>
       </div>
