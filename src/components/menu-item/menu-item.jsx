@@ -2,7 +2,7 @@ import "./menu-item.scss";
 import withRouter from "../../utilities/withRouter";
 
 const MenuItem = ({ title, desc, imageUrl, size, router, linkUrl }) => {
-  console.log(router);
+  //console.log(router);
   return (
     <div
       className={`menu-item ${size}`}

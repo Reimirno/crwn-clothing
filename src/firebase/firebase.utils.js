@@ -21,5 +21,5 @@ export const db = getFirestore(firebaseApp);
 //Set up Google Sign in
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
-provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
-export const signInWithGoogle = signInWithPopup(auth, provider);
+//provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+export const signInWithGoogle = () => signInWithPopup(auth, provider);
