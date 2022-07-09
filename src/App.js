@@ -1,7 +1,11 @@
 import "./App.css";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { auth } from "./firebase/firebase.utils";
+import {
+  auth,
+  createUserProfileDocument,
+  onSnapshotChanged,
+} from "./firebase/firebase.utils";
 import Homepage from "./pages/homepage/homepage";
 import AboutPage from "./pages/aboutpage/aboutpage";
 import NoMatchPage from "./pages/nomatchpage/nomatchpage";
@@ -17,17 +21,34 @@ class App extends React.Component {
     };
   }
 
+  unsubOnAuthStateChanged = null;
+  unsubOnSnapshotChanged = null;
+
   componentDidMount() {
-    auth.onAuthStateChanged((user) => {
-      this.setState({ currentUser: user }); //persistent across sessions
-      console.log(user);
+    this.unsubOnAuthStateChanged = auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+        this.unsubOnSnapshotChanged = onSnapshotChanged(userRef, (userSnap) => {
+          this.setState(
+            {
+              currentUser: {
+                id: userSnap.id,
+                ...userSnap.data(),
+              },
+            },
+            () => console.log(this.state)
+          );
+        });
+      }
+      this.setState({ currentUser: userAuth });
     });
   }
   componentWillUnmount() {
-    this.unsubscribeFromAuth();
+    this.unsubOnAuthStateChanged();
+    if (this.unsubOnSnapshotChanged) {
+      this.unsubOnSnapshotChanged();
+    }
   }
-
-  unsubscribeFromAuth() {}
 
   render() {
     return (

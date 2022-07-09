@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
 //Init firebase app with config
 const firebaseConfig = {
@@ -23,3 +29,26 @@ const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 //provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
+
+//Set up User Profile Database Creation
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+  const userRef = doc(db, "user", `${userAuth.uid}`);
+  const userSnap = await getDoc(userRef);
+
+  try {
+    if (!userSnap.exists()) {
+      const newUserData = {
+        displayName: userAuth.displayName,
+        email: userAuth.email,
+        creationTime: new Date(),
+        additionalData,
+      };
+      setDoc(userRef, newUserData);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  return userRef;
+};
+export const onSnapshotChanged = onSnapshot;
