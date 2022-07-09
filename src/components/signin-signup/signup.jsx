@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  auth,
   createUserEmailAccount,
   updateUserProfileName,
 } from "../../firebase/firebase.utils";
@@ -28,7 +27,7 @@ class SignUp extends React.Component {
     }
 
     try {
-      const userCred = await createUserEmailAccount(auth, email, password);
+      const userCred = await createUserEmailAccount(email, password);
       await updateUserProfileName(userCred.user, displayName);
       this.setState({
         displayName: "",

@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   updateProfile,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -35,7 +36,10 @@ export const db = getFirestore(firebaseApp);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
-export const createUserEmailAccount = createUserWithEmailAndPassword;
+export const signInWithEmail = async (email, password) =>
+  signInWithEmailAndPassword(auth, email, password);
+export const createUserEmailAccount = async (email, password) =>
+  createUserWithEmailAndPassword(auth, email, password);
 export const updateUserProfileName = async (user, displayName) => {
   if (displayName) {
     await updateProfile(user, { displayName: displayName });
