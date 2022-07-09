@@ -1,7 +1,7 @@
 import React from "react";
 import FormInput from "../form-input/form-input";
 import GeneralButton from "../general-button/general-button";
-import "./signin.scss";
+import "./signin-signup.scss";
 import { signInWithGoogle } from "../../firebase/firebase.utils";
 
 class SignIn extends React.Component {
@@ -20,7 +20,6 @@ class SignIn extends React.Component {
 
   handleChange = (event) => {
     let { value, name } = event.target;
-    console.log(value + " " + name);
     this.setState({ [name]: value });
   };
 
@@ -29,7 +28,7 @@ class SignIn extends React.Component {
       <div className="signin">
         <h2>I already have an account</h2>
         <span className="title">Sign in with your email and password</span>
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <FormInput
             name="email"
             type="email"

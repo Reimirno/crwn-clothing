@@ -1,11 +1,18 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import {
   getFirestore,
   doc,
   setDoc,
   getDoc,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 
 //Init firebase app with config
@@ -24,28 +31,53 @@ export const auth = getAuth(firebaseApp);
 auth.useDeviceLanguage();
 export const db = getFirestore(firebaseApp);
 
-//Set up Google Sign in
+//Auth-related Wrapper
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
-//provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
+export const createUserEmailAccount = createUserWithEmailAndPassword;
+export const updateUserProfileName = async (user, displayName) => {
+  if (displayName) {
+    await updateProfile(user, { displayName: displayName });
+    updateUserProfileDocumentField(user, "displayName", displayName);
+  } else {
+    console.log("no displayname");
+  }
+};
 
-//Set up User Profile Database Creation
-export const createUserProfileDocument = async (userAuth, additionalData) => {
-  if (!userAuth) return;
-  const userRef = doc(db, "user", `${userAuth.uid}`);
+//Db-related wrapper
+export const getUserProfileDocumentSnapshot = async (user) => {
+  if (!user) return;
+  const userRef = doc(db, "user", `${user.uid}`);
+  const userSnap = await getDoc(userRef);
+  return userSnap;
+};
+export const createUserProfileDocument = async (user, additionalData) => {
+  if (!user) return;
+  const userRef = doc(db, "user", `${user.uid}`);
   const userSnap = await getDoc(userRef);
 
   try {
     if (!userSnap.exists()) {
       const newUserData = {
-        displayName: userAuth.displayName,
-        email: userAuth.email,
+        displayName: user.displayName,
+        email: user.email,
         creationTime: new Date(),
-        additionalData,
+        additionalData: additionalData ? additionalData : null,
       };
       setDoc(userRef, newUserData);
     }
+  } catch (e) {
+    console.log(e);
+  }
+  return userRef;
+};
+export const updateUserProfileDocumentField = async (user, key, value) => {
+  if (!user) return;
+  const userRef = doc(db, "user", `${user.uid}`);
+
+  try {
+    updateDoc(userRef, { [key]: value });
   } catch (e) {
     console.log(e);
   }
