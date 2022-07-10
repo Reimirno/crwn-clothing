@@ -1,6 +1,7 @@
 import "./App.css";
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { connect } from "react-redux";
 import {
   auth,
   createUserProfileDocument,
@@ -12,41 +13,25 @@ import NoMatchPage from "./pages/nomatchpage/nomatchpage";
 import ShopPage from "./pages/shoppage/shoppage";
 import Header from "./components/header/header";
 import SignOnPage from "./pages/signonpage/signonpage";
+import { setCurrentUser } from "./redux/user/user.action";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: null,
-    };
-  }
-
   unsubOnAuthStateChanged = null;
   unsubOnSnapshotChanged = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
     this.unsubOnAuthStateChanged = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const userRef = await createUserProfileDocument(user);
         this.unsubOnSnapshotChanged = onSnapshotChanged(userRef, (userSnap) => {
-          this.setState(
-            (state) => ({
-              currentUser: {
-                id: userSnap.id,
-                ...userSnap.data(),
-              },
-            }),
-            () => console.log(this.state)
-          );
+          setCurrentUser({
+            id: userSnap.id,
+            ...userSnap.data(),
+          });
         });
-      } else {
-        this.setState(
-          {
-            currentUser: user,
-          },
-          () => console.log(this.state)
-        );
       }
+      setCurrentUser(user);
     });
   }
   componentWillUnmount() {
@@ -59,12 +44,21 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Routes>
           <Route index element={<Homepage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="*" element={<NoMatchPage />} />
-          <Route path="signon" element={<SignOnPage />} />
+          <Route
+            path="signon"
+            element={
+              this.props.currentUser == null ? (
+                <SignOnPage />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
           <Route path="shop" element={<ShopPage />} />
         </Routes>
       </div>
@@ -72,9 +66,20 @@ class App extends React.Component {
   }
 }
 
-/* API Changes:
+/* API Changes for react-router-dom:
 <Routes> Used to be <Switch> 
 element={<Homepage />} used to be component={Homepage}
 */
 
-export default App;
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+/*
+setCurrentUser on LHS is prop name of App,
+setCurrentUser on RHS is calling the function actually
+*/
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
