@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import "./header.scss";
-import { ReactComponent as Logo } from "../../assets/4.3 crown.svg.svg";
+import { ReactComponent as Logo } from "../../assets/crown.svg";
 import { auth } from "../../firebase/firebase.utils";
+import CartIcon from "../cart-icon/cart-icon";
+import CartDropDown from "../cart-dropdown/cart-dropdown";
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, cartHidden }) => {
   return (
     <div className="header">
       <Link to="/" className="logo-container">
@@ -26,7 +28,9 @@ const Header = ({ currentUser }) => {
             SIGN OUT
           </div>
         )}
+        <CartIcon />
       </nav>
+      {cartHidden ? null : <CartDropDown />}
     </div>
   );
 };
@@ -46,5 +50,6 @@ See https://stackoverflow.com/questions/2559318
 const mapStateToProps = (state) => ({
   //state will be rootReducer
   currentUser: state.user.currentUser,
+  cartHidden: state.cart.hidden,
 });
 export default connect(mapStateToProps)(Header);
