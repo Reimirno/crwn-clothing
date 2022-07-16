@@ -1,3 +1,4 @@
+import GeneralButton from "../general-button/general-button";
 import "./collection-item.scss";
 
 const CollectionItem = ({ item }) => {
@@ -13,6 +14,7 @@ const CollectionItem = ({ item }) => {
         <span className="name">{item.name}</span>
         <span className="price">{item.price}</span>
       </div>
+      <GeneralButton extraclass="inverted">Add to Cart</GeneralButton>
     </div>
   );
 };
