@@ -2,19 +2,28 @@ import { connect } from "react-redux";
 import { selectCartItems } from "../../redux/cart/cart.selector";
 import CartDropdownItem from "../cart-dropdown-item/cart-dropdown-item";
 import GeneralButton from "../general-button/general-button";
+import { createStructuredSelector } from "reselect";
 import "./cart-dropdown.scss";
-const CartDropDown = ({ cartItems }) => (
+import withRouter from "../../utilities/withRouter";
+
+const CartDropDown = ({ cartItems, router }) => (
   <div className="cart-dropdown">
     <div className="cart-items">
-      {cartItems.map((cartItem) => (
-        <CartDropdownItem key={cartItem.id} item={cartItem} />
-      ))}
+      {cartItems.length ? (
+        cartItems.map((cartItem) => (
+          <CartDropdownItem key={cartItem.id} item={cartItem} />
+        ))
+      ) : (
+        <span className="empty-msg">Your cart is empty.</span>
+      )}
     </div>
-    <GeneralButton>GO TO CHECKOUT</GeneralButton>
+    <GeneralButton onClick={() => router.navigate("checkout")}>
+      GO TO CHECKOUT
+    </GeneralButton>
   </div>
 );
 
-const mapStateToProps = (state) => ({
-  cartItems: selectCartItems(state),
+const mapStateToProps = createStructuredSelector({
+  cartItems: selectCartItems,
 });
-export default connect(mapStateToProps)(CartDropDown);
+export default withRouter(connect(mapStateToProps)(CartDropDown));

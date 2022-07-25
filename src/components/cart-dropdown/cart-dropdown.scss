@@ -11,11 +11,16 @@
   right: 40px;
   z-index: 5; //stay on top of most things
 
+  .empty-msg {
+    font-size: 1.1em;
+    margin: 50px auto;
+  }
   .cart-items {
     height: 240px;
     display: flex;
     flex-direction: column;
-    overflow: scroll; //make scrollbar appear
+    overflow-y: auto; //make scrollbar appear
+    overflow-x: hidden;
   }
 
   button {

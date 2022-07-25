@@ -5,6 +5,9 @@ import { ReactComponent as Logo } from "../../assets/crown.svg";
 import { auth } from "../../firebase/firebase.utils";
 import CartIcon from "../cart-icon/cart-icon";
 import CartDropDown from "../cart-dropdown/cart-dropdown";
+import { createStructuredSelector } from "reselect";
+import { selectCurrentUser } from "../../redux/user/user.selector";
+import { selectCartVisibility } from "../../redux/cart/cart.selector";
 
 const Header = ({ currentUser, cartHidden }) => {
   return (
@@ -47,9 +50,8 @@ either null, undefined, 0, NaN, false, or an empty string ("falsy values")
 See https://stackoverflow.com/questions/2559318
 */
 
-const mapStateToProps = (state) => ({
-  //state will be rootReducer
-  currentUser: state.user.currentUser,
-  cartHidden: state.cart.hidden,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  cartHidden: selectCartVisibility,
 });
 export default connect(mapStateToProps)(Header);

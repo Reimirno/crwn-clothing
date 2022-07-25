@@ -3,6 +3,7 @@ import { ReactComponent as ShoppingIcon } from "../../assets/shopping-bag.svg";
 import { toggleCartVisibility } from "../../redux/cart/cart.action";
 import { selectCartItemQuantity } from "../../redux/cart/cart.selector";
 import "./cart-icon.scss";
+import { createStructuredSelector } from "reselect";
 
 const CartIcon = ({ toggleCartVisibility, itemCount }) => (
   <div className="cart-icon" onClick={toggleCartVisibility}>
@@ -12,8 +13,8 @@ const CartIcon = ({ toggleCartVisibility, itemCount }) => (
 );
 
 //Passing the entire reducer state into selector
-const mapStateToProps = (state) => ({
-  itemCount: selectCartItemQuantity(state),
+const mapStateToProps = createStructuredSelector({
+  itemCount: selectCartItemQuantity,
 });
 
 const matchDispatchToProps = (dispatch) => ({

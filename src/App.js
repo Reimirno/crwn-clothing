@@ -14,6 +14,9 @@ import ShopPage from "./pages/shoppage/shoppage";
 import Header from "./components/header/header";
 import SignOnPage from "./pages/signonpage/signonpage";
 import { setCurrentUser } from "./redux/user/user.action";
+import { selectCurrentUser } from "./redux/user/user.selector";
+import { createStructuredSelector } from "reselect";
+import CheckoutPage from "./pages/checkoutpage/checkoutpage";
 
 class App extends React.Component {
   unsubOnAuthStateChanged = null;
@@ -49,6 +52,7 @@ class App extends React.Component {
           <Route index element={<Homepage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="*" element={<NoMatchPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
           <Route
             path="signon"
             element={
@@ -71,9 +75,10 @@ class App extends React.Component {
 element={<Homepage />} used to be component={Homepage}
 */
 
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
 });
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
