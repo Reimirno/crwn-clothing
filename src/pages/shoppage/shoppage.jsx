@@ -1,9 +1,9 @@
 import "./shoppage.scss";
-import CollectionOverview from "../../components/collection-overview/collection-overview";
+import { Outlet } from "react-router-dom";
 
 const ShopPage = () => (
   <div className="shop-page">
-    <CollectionOverview />
+    <Outlet />
   </div>
 );
 
