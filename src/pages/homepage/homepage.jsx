@@ -1,11 +1,15 @@
 import MenuDirectory from "../../components/menu-directory/menu-directory";
-import "./homepage.scss";
+//import "./homepage.scss";
+import { HomePageContainerDiv } from "./homepage.styles";
 
 const Homepage = () => {
   return (
-    <div className="homepage">
+    // <div className="homepage">
+    //   <MenuDirectory />
+    // </div>
+    <HomePageContainerDiv>
       <MenuDirectory />
-    </div>
+    </HomePageContainerDiv>
   );
 };
 

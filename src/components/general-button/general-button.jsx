@@ -1,11 +1,7 @@
-import "./general-button.scss";
+import { GeneralStyledButton } from "./general-button.style";
 
 const GeneralButton = ({ children, ...other }) => {
-  return (
-    <button className={`general-button ${other.extraclass}`} {...other}>
-      {children}
-    </button>
-  );
+  return <GeneralStyledButton {...other}>{children}</GeneralStyledButton>;
 };
 
 export default GeneralButton;
