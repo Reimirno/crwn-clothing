@@ -7,18 +7,23 @@ import {
   createUserProfileDocument,
   onSnapshotChanged,
 } from "./firebase/firebase.utils";
+import { setCurrentUser } from "./redux/user/user.action";
+import { selectCurrentUser } from "./redux/user/user.selector";
+import { createStructuredSelector } from "reselect";
+import { selectCollectionReady } from "./redux/shop/shop.selector";
 import Homepage from "./pages/homepage/homepage";
 import AboutPage from "./pages/aboutpage/aboutpage";
 import NoMatchPage from "./pages/nomatchpage/nomatchpage";
 import ShopPage from "./pages/shoppage/shoppage";
 import Header from "./components/header/header";
 import SignOnPage from "./pages/signonpage/signonpage";
-import { setCurrentUser } from "./redux/user/user.action";
-import { selectCurrentUser } from "./redux/user/user.selector";
-import { createStructuredSelector } from "reselect";
 import CheckoutPage from "./pages/checkoutpage/checkoutpage";
-import CollectionOverview from "./components/collection-overview/collection-overview";
+import WithSpinner from "./components/with-spinner/with-spinner";
+import collectionOverview from "./components/collection-overview/collection-overview";
 import CollectionPage from "./pages/collectionpage/collectionpage";
+
+const CollectionOverviewWithSpinner = WithSpinner(collectionOverview);
+const CollectionPageWithSpinner = WithSpinner(CollectionPage);
 
 class App extends React.Component {
   unsubOnAuthStateChanged = null;
@@ -47,6 +52,7 @@ class App extends React.Component {
   }
 
   render() {
+    const { collectionReady } = this.props;
     return (
       <div>
         <Header />
@@ -66,8 +72,18 @@ class App extends React.Component {
             }
           />
           <Route path="shop" element={<ShopPage />}>
-            <Route path="" element={<CollectionOverview />} />
-            <Route path=":collectionId" element={<CollectionPage />} />
+            <Route
+              path=""
+              element={
+                <CollectionOverviewWithSpinner isLoading={!collectionReady} />
+              }
+            />
+            <Route
+              path=":collectionId"
+              element={
+                <CollectionPageWithSpinner isLoading={!collectionReady} />
+              }
+            />
           </Route>
         </Routes>
       </div>
@@ -82,6 +98,7 @@ element={<Homepage />} used to be component={Homepage}
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  collectionReady: selectCollectionReady,
 });
 
 const mapDispatchToProps = (dispatch) => ({

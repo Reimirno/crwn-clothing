@@ -1,8 +1,8 @@
-import SHOP_DATA from "../../data/shop.data";
 import ShopActionTypes from "./shop.type";
 
 const INITIAL_STATE = {
-  collections: SHOP_DATA,
+  ready: false,
+  collections: null,
 };
 
 const shopReducer = (state = INITIAL_STATE, action) => {
@@ -11,6 +11,11 @@ const shopReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         collections: action.payload,
+      };
+    case ShopActionTypes.MARK_COLLECTIONS_READY:
+      return {
+        ...state,
+        ready: action.payload,
       };
     default:
       return state;

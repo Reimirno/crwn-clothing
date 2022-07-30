@@ -8,18 +8,23 @@ import {
   convertCollectionsSnapshotToMap,
   onSnapshotChanged,
 } from "../../firebase/firebase.utils";
-import { updateCollections } from "../../redux/shop/shop.action";
+import {
+  markCollectionsReady,
+  updateCollections,
+} from "../../redux/shop/shop.action";
 
 class ShopPage extends Component {
   unsubscribeFromSnapshot = null;
   componentDidMount() {
-    const { updateCollections } = this.props;
+    const { updateCollections, markCollectionsReady } = this.props;
     const collectionRef = colRef(db, "collections");
     this.unsubscribeFromSnapshot = onSnapshotChanged(
       collectionRef,
       async (snapshot) => {
+        markCollectionsReady(false);
         const collectionMap = convertCollectionsSnapshotToMap(snapshot);
         updateCollections(collectionMap);
+        markCollectionsReady(true);
       }
     );
   }
@@ -38,6 +43,7 @@ class ShopPage extends Component {
 const mapDispatchToState = (dispatch) => ({
   updateCollections: (collectionMap) =>
     dispatch(updateCollections(collectionMap)),
+  markCollectionsReady: (ready) => dispatch(markCollectionsReady(ready)),
 });
 
 export default connect(null, mapDispatchToState)(ShopPage);

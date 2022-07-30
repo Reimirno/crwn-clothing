@@ -1,4 +1,5 @@
 const ShopActionTypes = {
   UPDATE_COLLECTIONS: "UPDATE_COLLECTIONS",
+  MARK_COLLECTIONS_READY: "MARK_COLLECTIONS_READT",
 };
 export default ShopActionTypes;
