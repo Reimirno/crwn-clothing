@@ -15,10 +15,16 @@ class ShopPage extends Component {
   componentDidMount() {
     const { updateCollections } = this.props;
     const collectionRef = colRef(db, "collections");
-    onSnapshotChanged(collectionRef, async (snapshot) => {
-      const collectionMap = convertCollectionsSnapshotToMap(snapshot);
-      updateCollections(collectionMap);
-    });
+    this.unsubscribeFromSnapshot = onSnapshotChanged(
+      collectionRef,
+      async (snapshot) => {
+        const collectionMap = convertCollectionsSnapshotToMap(snapshot);
+        updateCollections(collectionMap);
+      }
+    );
+  }
+  componentWillUnmount() {
+    this.unsubscribeFromSnapshot();
   }
   render() {
     return (
