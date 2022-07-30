@@ -14,6 +14,8 @@ import {
   getDoc,
   onSnapshot,
   updateDoc,
+  collection,
+  writeBatch,
 } from "firebase/firestore";
 
 //Init firebase app with config
@@ -88,3 +90,21 @@ export const updateUserProfileDocumentField = async (user, key, value) => {
   return userRef;
 };
 export const onSnapshotChanged = onSnapshot;
+
+//Db-related Utils
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objToAdd,
+  objPreprocess = (x) => x
+) => {
+  console.log(collectionKey);
+  const collectionRef = collection(db, collectionKey);
+  console.log(collectionRef);
+  const batch = writeBatch(db);
+  objToAdd.forEach((obj) => {
+    const newDocRef = doc(collectionRef); //firebase will assign a unique id
+    batch.set(newDocRef, objPreprocess(obj));
+  });
+
+  return await batch.commit();
+};
