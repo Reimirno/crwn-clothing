@@ -52,6 +52,9 @@ export const updateUserProfileName = async (user, displayName) => {
 };
 
 //Db-related wrapper
+export const onSnapshotChanged = onSnapshot;
+export const docRef = doc;
+export const colRef = collection;
 export const getUserProfileDocumentSnapshot = async (user) => {
   if (!user) return;
   const userRef = doc(db, "user", `${user.uid}`);
@@ -89,7 +92,21 @@ export const updateUserProfileDocumentField = async (user, key, value) => {
   }
   return userRef;
 };
-export const onSnapshotChanged = onSnapshot;
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const arr = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+  return arr.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
+};
 
 //Db-related Utils
 export const addCollectionAndDocuments = async (
