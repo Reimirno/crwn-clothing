@@ -4,9 +4,7 @@
 
 A fully-fledged E-commerce website designed for a hypothetical company, implemented in React.
 
-The `heroku` branch is hosted at [Heroku](https://reimirno-crwn-live.herokuapp.com/).
-
-You can also clone the `main` branch and run a local server.
+The `main` branch is hosted at [Heroku](https://reimirno-crwn-live.herokuapp.com/). You can also clone it and run a local server.
 
 ## Available Scripts
 
