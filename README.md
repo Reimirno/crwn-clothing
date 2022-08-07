@@ -1,6 +1,6 @@
 # CRWN Clothing
 
-[![react](./.github/react.svg)][![redux](./.github/redux.svg)][![react-router](./.github/react-router.svg)]
+![react](./.github/react.svg]![redux](./.github/redux.svg)![react-router](./.github/react-router.svg)
 
 A fully-fledged E-commerce website designed for a hypothetical company, implemented in React.
 
